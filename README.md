@@ -17,3 +17,15 @@ Para poder realizar una compra los usuarios deben registrarse previamente ingres
 personales y domicilio para los envíos.
 
 Cada compra se abona en efectivo al recibir el pedido o al retirarlo en el negocio.
+
+Endpoints
+---------
+
+###Productos
+* Lista `GET /api/producto`
+* Consultar un producto `GET /api/producto/:id`
+* Alta `POST /api/producto`
+* Baja `DELETE /api/producto/:id`
+* Modificar `PUT /api/producto/:id`
+
+

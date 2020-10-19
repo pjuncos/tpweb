@@ -23,9 +23,9 @@ Endpoints
 
 ### Usuarios
 * Lista `GET /users`
+  * Lista usuarios activos `GET /users?state=active`
 * Consultar un usuario `GET /users/:id`
 * Alta `POST /users`
-* Baja `DELETE /users/:id`
 * Modificar `PUT /users/:id`
 
 ### Productos
@@ -37,7 +37,7 @@ Endpoints
 
 ### Promociones
 * Lista `GET /combos`
-* Consultar una prmoción `GET /combos/:id`
+* Consultar una promoción `GET /combos/:id`
 * Alta `POST /combos`
 * Baja `DELETE /combos/:id`
 * Modificar `PUT /combos/:id`
@@ -45,12 +45,14 @@ Endpoints
 ### Clientes
 * Lista `GET /clients`
 * Consultar un cliente `GET /clients/:id`
+* Pedidos de cliente `GET /clients/:id/orders`
 * Alta `POST /clients`
 * Baja `DELETE /clients/:id`
 * Modificar `PUT /clients/:id`
 
 ### Pedidos
 * Lista `GET /orders`
+  * Pedidos pendientes `GET /orders?status=pending`
 * Consultar un pedido `GET /orders/:id`
 * Alta `POST /orders`
 * Modificar `PUT /orders/:id`

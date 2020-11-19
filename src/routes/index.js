@@ -1,0 +1,15 @@
+const express = require('express');
+const productsRouter = require('./products');
+const clientsRouter = require('./clients');
+const ordersRouter = require('./orders');
+const usersRouter = require('./users');
+const combosRouter = require('./combos');
+
+const router = express.Router();
+router.use('/products', productsRouter);
+router.use('/clients', clientsRouter);
+router.use('/combos', combosRouter);
+router.use('/users', usersRouter);
+router.use('/orders', ordersRouter);
+
+module.exports = router;

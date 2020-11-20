@@ -37,9 +37,7 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Deleted');
-        res.status(200).send({
-          message: 'successfully deleted',
-        });
+        res.status(204);
       }
     })
     .catch((err) => {
@@ -78,7 +76,7 @@ const create = (req, res) => {
   const client = new Client(createFromObject(req.body));
   client.save()
     .then((newClient) => {
-      res.send(newClient);
+      res.status(201).send(newClient);
       const { _id } = newClient;
       logger.info(`Client created with id ${_id}`);
     })
@@ -118,9 +116,6 @@ const update = (req, res) => {
       logger.error(error.message);
       handleMongooseValidationError(req, res, error);
     });
-};
-
-const updatePassword = (req, res) => {
 };
 
 module.exports = {

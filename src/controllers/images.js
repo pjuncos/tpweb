@@ -32,9 +32,7 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Successfully deleted');
-        res.status(200).send({
-          message: 'Successfully deleted',
-        });
+        res.status(204);
       }
     })
     .catch((err) => {
@@ -99,7 +97,7 @@ const create = (req, res) => {
             model.save()
               .then((newItem) => {
                 const { _id, title } = newItem;
-                res.send({ _id, title });
+                res.status(201).send({ _id, title });
                 logger.info(`Product created with id ${_id}`);
               })
               .catch((error) => {
@@ -126,30 +124,23 @@ const updateTitle = (req, res) => {
 
   const data = { title: req.body.title };
 
-  Model.validate(data)
-    .then(
-      Model.findOneAndUpdate({ _id: req.params.id }, data, { new: true })
-        .then((updated) => {
-          if (!updated) {
-            logger.info('Not found');
-            res.status(404).send({
-              message: COMMON.NOT_FOUND,
-            });
-          } else {
-            logger.info(updated);
-            res.status(200).send(updated);
-          }
-        })
-        .catch((err) => {
-          logger.error(err.message);
-          res.status(500).send({
-            message: err.message,
-          });
-        }),
-    )
-    .catch((error) => {
-      logger.error(error.message);
-      handleMongooseValidationError(req, res, error);
+  Model.findOneAndUpdate({ _id: req.params.id }, data, { new: true })
+    .then((updated) => {
+      if (!updated) {
+        logger.info('Not found');
+        res.status(404).send({
+          message: COMMON.NOT_FOUND,
+        });
+      } else {
+        logger.info(updated);
+        res.status(200).send(updated);
+      }
+    })
+    .catch((err) => {
+      logger.error(err.message);
+      res.status(500).send({
+        message: err.message,
+      });
     });
 };
 

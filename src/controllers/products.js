@@ -3,6 +3,7 @@ const { handleMongooseValidationError } = require('./utils');
 const logger = require('../logger');
 
 const { COMMON } = require('../helpers/errors');
+const { STATUS } = require('../helpers/constants');
 
 const createFromObject = (obj) => ({
   title: obj.title,
@@ -11,7 +12,14 @@ const createFromObject = (obj) => ({
 
 const listAll = (req, res) => {
   logger.info('Listing products...');
-  Model.find()
+
+  let filter = {};
+  if (req.query.status) {
+    filter = { status: { $in: req.query.status.split(',') } };
+    logger.info(`filter: ${JSON.stringify(filter)}`);
+  }
+
+  Model.find(filter)
     .then((items) => {
       logger.info(`${items.length} items retrieved`);
       res.status(200).send(items);
@@ -34,9 +42,7 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Successfully deleted');
-        res.status(200).send({
-          message: 'Successfully deleted',
-        });
+        res.status(204);
       }
     })
     .catch((err) => {
@@ -75,7 +81,7 @@ const create = (req, res) => {
   const model = new Model(createFromObject(req.body));
   model.save()
     .then((newItem) => {
-      res.send(newItem);
+      res.status(201).send(newItem);
       const { _id } = newItem;
       logger.info(`Poduct created with id ${_id}`);
     })
@@ -117,6 +123,32 @@ const update = (req, res) => {
     });
 };
 
+const changeStatus = (req, res) => {
+  logger.info(`Getting Product ${req.params.id}...`);
+  if (!req.body.status || !Object.keys(STATUS).includes(req.body.status)) {
+    res.status(400).send();
+  } else {
+    Model.findOneAndUpdate({ _id: req.params.id }, { status: req.body.status }, { new: true })
+      .then((updated) => {
+        if (!updated) {
+          logger.info('Not found');
+          res.status(404).send({
+            message: COMMON.NOT_FOUND,
+          });
+        } else {
+          logger.info(updated);
+          res.status(200).send(updated);
+        }
+      })
+      .catch((err) => {
+        logger.error(err.message);
+        res.status(500).send({
+          message: err.message,
+        });
+      });
+  }
+};
+
 module.exports = {
-  listAll, create, deleteById, getById, update,
+  listAll, create, deleteById, getById, update, changeStatus,
 };

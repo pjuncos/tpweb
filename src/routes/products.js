@@ -19,10 +19,19 @@ router.route('/:id')
 router.route('/:id')
   .put(ProductsController.update);
 
+router.route('/:id')
+  .patch(ProductsController.changeStatus);
+
 router.route('/:productId/images')
   .post(ImagesController.create);
 
 router.route('/:productId/images')
   .get(ImagesController.listAllByProduct);
+
+router.route('/:productId/images/:id')
+  .get(ImagesController.getById);
+
+router.route('/:productId/images/:id')
+  .patch(ImagesController.updateTitle);
 
 module.exports = router;

@@ -35,13 +35,6 @@ Endpoints
 * Baja `DELETE /products/:id`
 * Modificar `PUT /products/:id`
 
-### Promociones
-* Lista `GET /combos`
-* Consultar una promoción `GET /combos/:id`
-* Alta `POST /combos`
-* Baja `DELETE /combos/:id`
-* Modificar `PUT /combos/:id`
-
 ### Clientes
 * Lista `GET /clients`
 * Consultar un cliente `GET /clients/:id`

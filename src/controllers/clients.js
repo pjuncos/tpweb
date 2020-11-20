@@ -37,7 +37,7 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Deleted');
-        res.status(204);
+        res.status(204).send();
       }
     })
     .catch((err) => {

@@ -12,6 +12,10 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     maxlength: 50,
   },
+  price: {
+    type: Number,
+    required: true,
+  },
   status: {
     type: String,
     enum: [STATUS.ACTIVE, STATUS.INACTIVE],

@@ -1,3 +1,7 @@
 const STATUS = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' };
 
-module.exports = { STATUS };
+const ORDER_STATUS = {
+  PENDING: 'PENDING', DELIVERED: 'DELIVERED', CANCELED: 'CANCELED',
+};
+
+module.exports = { STATUS, ORDER_STATUS };

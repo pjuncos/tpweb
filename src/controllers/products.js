@@ -8,28 +8,37 @@ const { STATUS } = require('../helpers/constants');
 const createFromObject = (obj) => ({
   title: obj.title,
   description: obj.description,
+  price: obj.price,
 });
 
 const listAll = (req, res) => {
   logger.info('Listing products...');
 
   let filter = {};
+  let filterError = false;
   if (req.query.status) {
-    filter = { status: { $in: req.query.status.split(',') } };
-    logger.info(`filter: ${JSON.stringify(filter)}`);
+    if (!Object.values(STATUS).includes(req.query.status)) {
+      res.status(400).send();
+      filterError = true;
+    } else {
+      filter = { status: { $in: req.query.status.split(',') } };
+      logger.info(`filter: ${JSON.stringify(filter)}`);
+    }
   }
 
-  Model.find(filter)
-    .then((items) => {
-      logger.info(`${items.length} items retrieved`);
-      res.status(200).send(items);
-    })
-    .catch((err) => {
-      logger.error(err.message);
-      res.status(500).send({
-        message: err.message || COMMON.UNKNOWN_ERROR,
+  if (!filterError) {
+    Model.find(filter)
+      .then((items) => {
+        logger.info(`${items.length} items retrieved`);
+        res.status(200).send(items);
+      })
+      .catch((err) => {
+        logger.error(err.message);
+        res.status(500).send({
+          message: err.message || COMMON.UNKNOWN_ERROR,
+        });
       });
-    });
+  }
 };
 
 const deleteById = (req, res) => {
@@ -42,7 +51,7 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Successfully deleted');
-        res.status(204);
+        res.status(204).send();
       }
     })
     .catch((err) => {
@@ -125,7 +134,7 @@ const update = (req, res) => {
 
 const changeStatus = (req, res) => {
   logger.info(`Getting Product ${req.params.id}...`);
-  if (!req.body.status || !Object.keys(STATUS).includes(req.body.status)) {
+  if (!req.body.status || !Object.values(STATUS).includes(req.body.status)) {
     res.status(400).send();
   } else {
     Model.findOneAndUpdate({ _id: req.params.id }, { status: req.body.status }, { new: true })

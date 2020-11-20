@@ -48,40 +48,39 @@ const create = (req, res) => {
     .then((client) => {
       if (!client) {
         logger.info('Client not found');
-        res.status(404).send({
+        return res.status(404).send({
           message: 'Client not found',
         });
-      } else {
-        const products = [];
-
-        req.body.products.forEach((product) => {
-          products.push({
-            product: { _id: product.productId },
-            quantity: product.quantity,
-            price: product.price,
-          });
-        });
-
-        const model = new Model({
-          client: { _id: req.body.clientId },
-          items: products,
-          totalPrice: req.body.totalPrice,
-        });
-        model.save()
-          .then((newItem) => {
-            res.status(201).send(newItem);
-            const { _id } = newItem;
-            logger.info(`Order created with id ${_id}`);
-          })
-          .catch((error) => {
-            logger.error(error.message);
-            handleMongooseValidationError(req, res, error);
-          });
       }
+      const products = [];
+
+      req.body.products.forEach((product) => {
+        products.push({
+          product: { _id: product.productId },
+          quantity: product.quantity,
+          price: product.price,
+        });
+      });
+
+      const model = new Model({
+        client: { _id: req.body.clientId },
+        items: products,
+        totalPrice: req.body.totalPrice,
+      });
+      model.save()
+        .then((newItem) => {
+          const { _id } = newItem;
+          logger.info(`Order created with id ${_id}`);
+          return res.status(201).send(newItem);
+        })
+        .catch((error) => {
+          logger.error(error.message);
+          return handleMongooseValidationError(req, res, error);
+        });
     })
     .catch((err) => {
       logger.error(err.message);
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message,
       });
     });

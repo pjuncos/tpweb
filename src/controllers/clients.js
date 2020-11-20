@@ -17,11 +17,11 @@ const listAll = (req, res) => {
   Client.find()
     .then((clients) => {
       logger.info(`${clients.length} clients retrieved`);
-      res.status(200).send(clients);
+      return res.status(200).send(clients);
     })
     .catch((err) => {
       logger.error(err.message);
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message || COMMON.UNKNOWN_ERROR,
       });
     });
@@ -37,12 +37,12 @@ const deleteById = (req, res) => {
         });
       } else {
         logger.info('Deleted');
-        res.status(204).send();
+        return res.status(204).send();
       }
     })
     .catch((err) => {
       logger.error(err.message);
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message,
       });
     });
@@ -54,17 +54,16 @@ const getById = (req, res) => {
     .then((client) => {
       if (!client) {
         logger.info('Client not found');
-        res.status(404).send({
+        return res.status(404).send({
           message: COMMON.NOT_FOUND,
         });
-      } else {
-        logger.info(client);
-        res.status(200).send(client);
       }
+      logger.info(client);
+      return res.status(200).send(client);
     })
     .catch((err) => {
       logger.error(err.message);
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message,
       });
     });
@@ -76,9 +75,9 @@ const create = (req, res) => {
   const client = new Client(createFromObject(req.body));
   client.save()
     .then((newClient) => {
-      res.status(201).send(newClient);
       const { _id } = newClient;
       logger.info(`Client created with id ${_id}`);
+      return res.status(201).send(newClient);
     })
     .catch((error) => {
       logger.error(error.message);
@@ -97,24 +96,23 @@ const update = (req, res) => {
         .then((updated) => {
           if (!updated) {
             logger.info('Client not found');
-            res.status(404).send({
+            return res.status(404).send({
               message: COMMON.NOT_FOUND,
             });
-          } else {
-            logger.info(updated);
-            res.status(200).send(updated);
           }
+          logger.info(updated);
+          return res.status(200).send(updated);
         })
         .catch((err) => {
           logger.error(err.message);
-          res.status(500).send({
+          return res.status(500).send({
             message: err.message,
           });
         }),
     )
     .catch((error) => {
       logger.error(error.message);
-      handleMongooseValidationError(req, res, error);
+      return handleMongooseValidationError(req, res, error);
     });
 };
 

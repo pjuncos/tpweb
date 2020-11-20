@@ -21,31 +21,32 @@ Cada compra se abona en efectivo al recibir el pedido o al retirarlo en el negoc
 Endpoints
 ---------
 
-### Usuarios
-* Lista `GET /users`
-  * Lista usuarios activos `GET /users?state=active`
-* Consultar un usuario `GET /users/:id`
-* Alta `POST /users`
-* Modificar `PUT /users/:id`
-
 ### Productos
-* Lista `GET /products`
-* Consultar un producto `GET /products/:id`
-* Alta `POST /products`
-* Baja `DELETE /products/:id`
-* Modificar `PUT /products/:id`
+* Lista `GET v1/products`
+  * Lista por estado `GET v1/products?status=:status1, :statusN`
+* Consultar un producto `GET v1/products/:id`
+* Alta `POST v1/products`
+* Baja `DELETE v1/products/:id`
+* Modificar `PUT v1/products/:id`
+#### Imagenes
+* Agregar Imagen a producto `POST v1/products/:id/images`
+* Lista Imagenes de producto `GET v1/products/:id/images`
+* Eliminar imagen de producto `DELETE v1/products/:id/images/:imageId`
+* Consultar imagen de producto `GET v1/products/:id/images/:imageId`
+* Actualizar titulo de imagen de producto `PATCH v1/products/:id/images/:imageId`
 
 ### Clientes
 * Lista `GET /clients`
 * Consultar un cliente `GET /clients/:id`
-* Pedidos de cliente `GET /clients/:id/orders`
 * Alta `POST /clients`
 * Baja `DELETE /clients/:id`
 * Modificar `PUT /clients/:id`
 
 ### Pedidos
 * Lista `GET /orders`
-  * Pedidos pendientes `GET /orders?status=pending`
+  * Pedidos pendientes `GET /orders?status=PENDING`
+  * Pedidos entregados `GET /orders?status=DELIVERED`
 * Consultar un pedido `GET /orders/:id`
 * Alta `POST /orders`
-* Modificar `PUT /orders/:id`
+* Cambiar estado `PATCH v1/products/:id/images/:imageId`
+
